@@ -1,0 +1,46 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.input {
+  @include input-base;
+  
+  &--error {
+    border-color: $error;
+    
+    &:focus {
+      border-color: $error;
+      box-shadow: 0 0 0 2px rgba($error, 0.2);
+    }
+  }
+}
+
+.input-group {
+  margin-bottom: $spacing-4;
+  
+  &__label {
+    display: block;
+    margin-bottom: $spacing-2;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    color: $text-secondary;
+  }
+  
+  &__error {
+    margin-top: $spacing-1;
+    font-size: $text-xs;
+    color: $error;
+  }
+  
+  &__hint {
+    margin-top: $spacing-1;
+    font-size: $text-xs;
+    color: $text-muted;
+  }
+}
+
+.textarea {
+  @include input-base;
+  min-height: 120px;
+  resize: vertical;
+}
+

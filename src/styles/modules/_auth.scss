@@ -1,0 +1,104 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.auth-card {
+  @include card;
+  width: 100%;
+  max-width: 420px;
+  padding: $spacing-8;
+  position: relative;
+  z-index: 1;
+  
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-6;
+  }
+  
+  &__logo {
+    @include flex-center;
+    gap: $spacing-2;
+    font-size: $text-2xl;
+    font-weight: $font-bold;
+    margin-bottom: $spacing-4;
+    
+    svg {
+      color: $primary;
+      font-size: $text-3xl;
+    }
+  }
+  
+  &__title {
+    font-size: $text-xl;
+    margin-bottom: $spacing-2;
+  }
+  
+  &__subtitle {
+    font-size: $text-sm;
+    color: $text-secondary;
+  }
+  
+  &__form {
+    margin-bottom: $spacing-4;
+  }
+  
+  &__footer {
+    text-align: center;
+    font-size: $text-sm;
+    color: $text-secondary;
+    
+    a {
+      color: $primary-light;
+      font-weight: $font-medium;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  &__divider {
+    @include flex-center;
+    gap: $spacing-4;
+    margin: $spacing-6 0;
+    
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $border-default;
+    }
+    
+    span {
+      font-size: $text-xs;
+      color: $text-muted;
+      text-transform: uppercase;
+    }
+  }
+  
+  &__social {
+    @include flex-center;
+    gap: $spacing-3;
+  }
+  
+  &__social-btn {
+    @include button-secondary;
+    padding: $spacing-3;
+    border-radius: $radius-md;
+    font-size: $text-xl;
+    
+    &--google {
+      &:hover {
+        background: rgba(#ea4335, 0.2);
+        color: #ea4335;
+      }
+    }
+    
+    &--github {
+      &:hover {
+        background: rgba(#ffffff, 0.1);
+      }
+    }
+  }
+}
+

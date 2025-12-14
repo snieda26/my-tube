@@ -1,0 +1,55 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: $surface-overlay;
+  z-index: $z-modal-backdrop;
+  @include flex-center;
+  padding: $spacing-4;
+}
+
+.modal {
+  @include card;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  z-index: $z-modal;
+  
+  &__header {
+    @include flex-between;
+    padding: $spacing-4;
+    border-bottom: 1px solid $border-default;
+  }
+  
+  &__title {
+    font-size: $text-lg;
+    font-weight: $font-semibold;
+  }
+  
+  &__close {
+    @include button-ghost;
+    padding: $spacing-2;
+    border-radius: $radius-full;
+    font-size: $text-xl;
+  }
+  
+  &__body {
+    padding: $spacing-4;
+    overflow-y: auto;
+    max-height: calc(90vh - 130px);
+    
+    @include custom-scrollbar;
+  }
+  
+  &__footer {
+    @include flex-start;
+    justify-content: flex-end;
+    gap: $spacing-3;
+    padding: $spacing-4;
+    border-top: 1px solid $border-default;
+  }
+}
+

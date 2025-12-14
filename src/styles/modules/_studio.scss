@@ -1,0 +1,113 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.studio-nav {
+  @include flex-column;
+  gap: $spacing-1;
+  
+  &__item {
+    @include flex-start;
+    gap: $spacing-3;
+    width: 100%;
+    padding: $spacing-3;
+    border-radius: $radius-md;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    font-size: $text-sm;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all $transition-fast;
+    
+    &:hover {
+      background: $bg-hover;
+      color: $text-primary;
+    }
+    
+    &--active {
+      background: rgba($primary, 0.15);
+      color: $primary-light;
+      
+      svg {
+        color: $primary;
+      }
+    }
+    
+    svg {
+      font-size: $text-xl;
+    }
+  }
+}
+
+.studio-header {
+  @include flex-between;
+  margin-bottom: $spacing-6;
+  
+  &__title {
+    font-size: $text-2xl;
+    font-weight: $font-bold;
+  }
+}
+
+.studio-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+  
+  &__card {
+    @include card;
+    padding: $spacing-4;
+  }
+  
+  &__label {
+    font-size: $text-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-2;
+  }
+  
+  &__value {
+    font-size: $text-2xl;
+    font-weight: $font-bold;
+  }
+}
+
+.upload-zone {
+  @include card;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-12;
+  border: 2px dashed $border-default;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &:hover {
+    border-color: $primary;
+    background: rgba($primary, 0.05);
+  }
+  
+  &--active {
+    border-color: $primary;
+    background: rgba($primary, 0.1);
+  }
+  
+  &__icon {
+    font-size: 48px;
+    color: $text-muted;
+  }
+  
+  &__text {
+    text-align: center;
+    
+    h3 {
+      margin-bottom: $spacing-2;
+    }
+    
+    p {
+      font-size: $text-sm;
+      color: $text-muted;
+    }
+  }
+}
+
