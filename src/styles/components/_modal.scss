@@ -5,9 +5,11 @@
   position: fixed;
   inset: 0;
   background: $surface-overlay;
+  backdrop-filter: blur(4px);
   z-index: $z-modal-backdrop;
   @include flex-center;
-  padding: $spacing-4;
+  opacity: 0;
+  animation: fadeIn $transition-normal forwards;
 }
 
 .modal {
@@ -15,12 +17,26 @@
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
-  overflow: hidden;
-  z-index: $z-modal;
+  overflow: auto;
+  animation: slideUp $transition-normal forwards;
+  
+  @include custom-scrollbar;
+  
+  &--sm {
+    max-width: 400px;
+  }
+  
+  &--lg {
+    max-width: 700px;
+  }
+  
+  &--xl {
+    max-width: 900px;
+  }
   
   &__header {
     @include flex-between;
-    padding: $spacing-4;
+    padding: $spacing-4 $spacing-6;
     border-bottom: 1px solid $border-default;
   }
   
@@ -33,23 +49,21 @@
     @include button-ghost;
     padding: $spacing-2;
     border-radius: $radius-full;
-    font-size: $text-xl;
   }
   
   &__body {
-    padding: $spacing-4;
-    overflow-y: auto;
-    max-height: calc(90vh - 130px);
-    
-    @include custom-scrollbar;
+    padding: $spacing-6;
   }
   
   &__footer {
-    @include flex-start;
-    justify-content: flex-end;
-    gap: $spacing-3;
-    padding: $spacing-4;
+    @include flex-between;
+    padding: $spacing-4 $spacing-6;
     border-top: 1px solid $border-default;
+    gap: $spacing-3;
+    
+    &--right {
+      justify-content: flex-end;
+    }
   }
 }
 

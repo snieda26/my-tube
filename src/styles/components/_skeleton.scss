@@ -4,42 +4,37 @@
 .skeleton {
   background: linear-gradient(
     90deg,
-    $bg-tertiary 25%,
+    $bg-tertiary 0%,
     $bg-hover 50%,
-    $bg-tertiary 75%
+    $bg-tertiary 100%
   );
   background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
   border-radius: $radius-md;
-  
-  &--circle {
-    border-radius: $radius-full;
-  }
   
   &--text {
     height: 1em;
-    margin-bottom: $spacing-2;
-    
-    &:last-child {
-      width: 80%;
-    }
+    border-radius: $radius-sm;
   }
   
   &--title {
     height: 1.5em;
     width: 60%;
-    margin-bottom: $spacing-3;
   }
   
   &--avatar {
-    width: 40px;
-    height: 40px;
     border-radius: $radius-full;
   }
   
   &--thumbnail {
     @include aspect-video;
-    width: 100%;
+    border-radius: $radius-lg;
+  }
+  
+  &--button {
+    height: 40px;
+    width: 100px;
+    border-radius: $radius-md;
   }
 }
 
