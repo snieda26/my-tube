@@ -12,7 +12,7 @@ export function Header() {
             <HiMenu />
           </button>
 
-          <Link href="/">
+          <Link href="/" className="header__logo">
             <FaPlay className="header__logo-icon" />
             <span>MyTube</span>
           </Link>
@@ -24,7 +24,7 @@ export function Header() {
           </form>
         </div>
         <div className="header__right">
-          <Link href="/studio">
+          <Link href="/studio" className="header__action">
             <HiPlus />
           </Link>
 
