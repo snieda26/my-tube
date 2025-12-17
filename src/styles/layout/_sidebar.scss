@@ -12,9 +12,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   z-index: $z-sticky;
-  transition:
-    width $transition-normal,
-    transform $transition-normal;
+  transition: width $transition-normal, transform $transition-normal;
 
   @include custom-scrollbar;
 
@@ -68,10 +66,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: $spacing-2 $spacing-3;
-    transition:
-      opacity $transition-normal,
-      height $transition-normal,
-      padding $transition-normal;
+    transition: opacity $transition-normal, height $transition-normal, padding $transition-normal;
   }
 
   &__nav {
@@ -130,10 +125,7 @@
     font-size: $text-xs;
     color: $text-muted;
     text-transform: uppercase;
-    transition:
-      opacity $transition-normal,
-      height $transition-normal,
-      padding $transition-normal;
+    transition: opacity $transition-normal, height $transition-normal, padding $transition-normal;
   }
 
   &__subscription {
@@ -146,12 +138,18 @@
     border: none;
     color: $text-secondary;
     font-size: $text-sm;
+    text-decoration: none;
     cursor: pointer;
     transition: all $transition-fast;
 
     &:hover {
       background: $bg-hover;
       color: $text-primary;
+    }
+
+    &--active {
+      background: rgba($primary, 0.15);
+      color: $primary-light;
     }
   }
 
