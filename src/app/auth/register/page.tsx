@@ -3,8 +3,10 @@
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { FaPlay } from 'react-icons/fa'
+import { useState } from 'react'
 import Input from '@/common/components/ui/input/Input'
 import Button from '@/common/components/ui/button/Button'
+import { useRegister } from '@/modules/auth'
 
 interface RegisterFormData {
 	name: string
@@ -14,13 +16,25 @@ interface RegisterFormData {
 }
 
 export default function RegisterPage() {
+	const { register: registerUser, isLoading } = useRegister()
+	const [error, setError] = useState<string | null>(null)
+
 	const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormData>()
 	
 	const password = watch('password')
 
-	const onSubmit = (data: RegisterFormData) => {
-		// TODO: Implement registration logic
-		console.log('Registration form submitted:', data)
+	const onSubmit = async (data: RegisterFormData) => {
+		try {
+			setError(null)
+			await registerUser({
+				email: data.email,
+				password: data.password,
+				confirmPassword: data.confirmPassword,
+				name: data.name || undefined,
+			})
+		} catch (err) {
+			setError('Registration failed. Please try again.')
+		}
 	}
 
 	return (
@@ -35,10 +49,24 @@ export default function RegisterPage() {
 			</div>
 
 			<form className="auth-card__form" onSubmit={handleSubmit(onSubmit)}>
+				{error && (
+					<div style={{ 
+						padding: '12px', 
+						backgroundColor: '#fee', 
+						color: '#c33', 
+						borderRadius: '8px',
+						marginBottom: '16px',
+						fontSize: '14px'
+					}}>
+						{error}
+					</div>
+				)}
+
 				<Input
 					label="Name (optional)"
 					type="text"
 					{...register('name')}
+					disabled={isLoading}
 				/>
 
 				<Input
@@ -52,6 +80,7 @@ export default function RegisterPage() {
 						},
 					})}
 					error={errors.email?.message}
+					disabled={isLoading}
 				/>
 
 				<Input
@@ -66,6 +95,7 @@ export default function RegisterPage() {
 					})}
 					error={errors.password?.message}
 					hint="At least 8 characters"
+					disabled={isLoading}
 				/>
 
 				<Input
@@ -77,14 +107,16 @@ export default function RegisterPage() {
 							value === password || 'Passwords do not match',
 					})}
 					error={errors.confirmPassword?.message}
+					disabled={isLoading}
 				/>
 
 				<Button
 					type="submit"
 					variant="primary"
 					fullWidth
+					disabled={isLoading}
 				>
-					Create Account
+					{isLoading ? 'Creating Account...' : 'Create Account'}
 				</Button>
 			</form>
 

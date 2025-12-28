@@ -3,8 +3,10 @@
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { FaPlay } from 'react-icons/fa'
+import { useState } from 'react'
 import Input from '@/common/components/ui/input/Input'
 import Button from '@/common/components/ui/button/Button'
+import { useLogin } from '@/modules/auth'
 
 interface LoginFormData {
 	email: string
@@ -12,16 +14,26 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
+	const { login, isLoading } = useLogin()
+	const [error, setError] = useState<string | null>(null)
+
 	const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
 		defaultValues: {
-			email: 'demo@example.com',
-			password: 'password123',
+			email: '',
+			password: '',
 		}
 	})
 
-	const onSubmit = (data: LoginFormData) => {
-		// TODO: Implement login logic
-		console.log('Login form submitted:', data)
+	const onSubmit = async (data: LoginFormData) => {
+		try {
+			setError(null)
+			await login({
+				email: data.email,
+				password: data.password,
+			})
+		} catch (err) {
+			setError('Login failed. Please check your credentials.')
+		}
 	}
 
 	return (
@@ -36,6 +48,19 @@ export default function LoginPage() {
 			</div>
 
 			<form className="auth-card__form" onSubmit={handleSubmit(onSubmit)}>
+				{error && (
+					<div style={{ 
+						padding: '12px', 
+						backgroundColor: '#fee', 
+						color: '#c33', 
+						borderRadius: '8px',
+						marginBottom: '16px',
+						fontSize: '14px'
+					}}>
+						{error}
+					</div>
+				)}
+
 				<Input
 					label="Email"
 					type="email"
@@ -47,6 +72,7 @@ export default function LoginPage() {
 						},
 					})}
 					error={errors.email?.message}
+					disabled={isLoading}
 				/>
 
 				<Input
@@ -54,16 +80,22 @@ export default function LoginPage() {
 					type="password"
 					{...register('password', {
 						required: 'Password is required',
+						minLength: {
+							value: 6,
+							message: 'Password must be at least 6 characters',
+						},
 					})}
 					error={errors.password?.message}
+					disabled={isLoading}
 				/>
 
 				<Button
 					type="submit"
 					variant="primary"
 					fullWidth
+					disabled={isLoading}
 				>
-					Sign In
+					{isLoading ? 'Signing in...' : 'Sign In'}
 				</Button>
 			</form>
 
