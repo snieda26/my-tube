@@ -9,10 +9,10 @@ export const API_CONFIG = {
 } as const
 
 export const AUTH_ENDPOINTS = {
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  LOGOUT: '/auth/logout',
-  REFRESH: '/auth/refresh',
-  PROFILE: '/account/me',
+  LOGIN: '/api/auth/login',
+  REGISTER: '/api/auth/register',
+  LOGOUT: '/api/auth/logout',
+  REFRESH: '/api/auth/refresh',
+  PROFILE: '/api/account/me',
 } as const
 
