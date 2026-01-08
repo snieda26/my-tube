@@ -1,8 +1,3 @@
-/**
- * Auth Module Types
- * Centralized type definitions for authentication
- */
-
 export interface User {
   id: string
   email: string

@@ -1,9 +1,3 @@
-/**
- * Auth Guard Component
- * Protects routes from unauthenticated access
- * Usage: Wrap protected pages/components with this guard
- */
-
 'use client'
 
 import { useEffect } from 'react'

@@ -1,13 +1,7 @@
-/**
- * Axios API Client with Interceptors
- * Handles authentication, token refresh, and error handling
- */
-
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 import { API_CONFIG, AUTH_ENDPOINTS } from '@/modules/auth/config/api.config'
 
-// Create axios instance
 export const apiClient = axios.create({
   baseURL: API_CONFIG.baseURL,
   timeout: API_CONFIG.timeout,
@@ -17,7 +11,6 @@ export const apiClient = axios.create({
   },
 })
 
-// Request interceptor - attach access token
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const accessToken = Cookies.get('accessToken')
@@ -31,7 +24,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Token refresh queue management
 let isRefreshing = false
 let failedQueue: Array<{
   resolve: (token: string) => void
@@ -49,7 +41,6 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
   failedQueue = []
 }
 
-// Response interceptor - handle 401 and token refresh
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -57,9 +48,7 @@ apiClient.interceptors.response.use(
       _retry?: boolean
     }
 
-    // Handle 401 Unauthorized errors
     if (error.response?.status === 401 && !originalRequest._retry) {
-      // If already refreshing, queue this request
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
@@ -77,7 +66,6 @@ apiClient.interceptors.response.use(
       isRefreshing = true
 
       try {
-        // Attempt token refresh
         const response = await axios.post(
           `${API_CONFIG.baseURL}${AUTH_ENDPOINTS.REFRESH}`,
           {},
@@ -86,30 +74,24 @@ apiClient.interceptors.response.use(
 
         const { accessToken } = response.data
 
-        // Update cookie with new token
         Cookies.set('accessToken', accessToken, {
           expires: 7,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
         })
 
-        // Process queued requests with new token
         processQueue(null, accessToken)
 
-        // Retry original request
         if (originalRequest.headers) {
           originalRequest.headers.Authorization = `Bearer ${accessToken}`
         }
 
         return apiClient(originalRequest)
       } catch (refreshError) {
-        // Token refresh failed - clear auth and redirect
         processQueue(refreshError as AxiosError, null)
 
-        // Clear cookies
         Cookies.remove('accessToken')
 
-        // Redirect to login (client-side only)
         if (typeof window !== 'undefined') {
           window.location.href = '/auth/login'
         }

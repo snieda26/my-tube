@@ -1,9 +1,3 @@
-/**
- * Guest Guard Component
- * Redirects authenticated users away from auth pages
- * Usage: Wrap login/register pages with this guard
- */
-
 'use client'
 
 import { useEffect } from 'react'

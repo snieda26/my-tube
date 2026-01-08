@@ -1,8 +1,3 @@
-/**
- * Application Providers
- * Wraps app with all necessary providers
- */
-
 'use client'
 
 import React from 'react'
