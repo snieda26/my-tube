@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { FaPlay } from 'react-icons/fa'
 import Input from '@/common/components/ui/input/Input'
 import Button from '@/common/components/ui/button/Button'
+import { useLogin } from '@/modules/auth/hooks/use-auth'
 
 interface LoginFormData {
   email: string
@@ -13,6 +14,7 @@ interface LoginFormData {
 }
 
 export default function LoginPage() {
+  const { login, isLoading } = useLogin()
   const {
     register,
     handleSubmit,
@@ -24,8 +26,8 @@ export default function LoginPage() {
     },
   })
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Login form submitted:', data)
+  const onSubmit = async (data: LoginFormData) => {
+    await login(data)
   }
 
   return (
@@ -58,7 +60,7 @@ export default function LoginPage() {
           error={errors.password?.message}
         />
 
-        <Button type="submit" variant="primary" fullWidth>
+        <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
           Sign In
         </Button>
       </form>

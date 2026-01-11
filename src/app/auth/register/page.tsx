@@ -5,6 +5,7 @@ import { FaPlay } from 'react-icons/fa'
 import Input from '@/common/components/ui/input/Input'
 import Button from '@/common/components/ui/button/Button'
 import { useForm } from 'react-hook-form'
+import { useRegister } from '@/modules/auth/hooks/use-auth'
 
 interface RegisterFormData {
   name: string
@@ -14,6 +15,7 @@ interface RegisterFormData {
 }
 
 export default function RegisterPage() {
+  const { register: registerUser, isLoading } = useRegister()
   const {
     register,
     handleSubmit,
@@ -21,8 +23,13 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterFormData>()
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log('Registration form submitted:', data)
+  const onSubmit = async (data: RegisterFormData) => {
+    await registerUser({
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+      name: data.name || undefined,
+    })
   }
 
   return (
@@ -86,7 +93,7 @@ export default function RegisterPage() {
           error={errors.confirmPassword?.message}
         />
 
-        <Button type="submit" variant="primary" fullWidth>
+        <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
           Create Account
         </Button>
       </form>

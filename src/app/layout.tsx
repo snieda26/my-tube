@@ -5,6 +5,7 @@ import '@/styles/components/index.scss'
 import '@/styles/layout/index.scss'
 import '@/styles/modules/index.scss'
 import { Metadata } from 'next'
+import { AppProviders } from '@/providers/app-providers'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   )
 }
