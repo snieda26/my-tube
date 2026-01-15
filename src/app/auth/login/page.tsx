@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
-
+import { useState } from 'react'
 import Link from 'next/link'
 import { FaPlay } from 'react-icons/fa'
 import Input from '@/common/components/ui/input/Input'
@@ -15,6 +15,7 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const { login, isLoading } = useLogin()
+  const [error, setError] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -27,7 +28,12 @@ export default function LoginPage() {
   })
 
   const onSubmit = async (data: LoginFormData) => {
-    await login(data)
+    try {
+      setError(null)
+      await login(data)
+    } catch (err) {
+      setError('Login failed. Please check your credentials.')
+    }
   }
 
   return (
@@ -42,6 +48,12 @@ export default function LoginPage() {
       </div>
 
       <form className="auth-card__form" onSubmit={handleSubmit(onSubmit)}>
+        {error && (
+          <div className="auth-card__error">
+            {error}
+          </div>
+        )}
+
         <Input
           label="Email"
           type="email"
