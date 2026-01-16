@@ -12,6 +12,8 @@ export { videoService } from './services/video.service'
 
 // Hooks
 export { useVideo, useToggleLike, useRecordView } from './hooks/use-video'
+export { useExploreVideos } from './hooks/use-videos'
 
 // Components
 export { default as VideoPlayer } from './components/video-player/VideoPlayer'
+export { default as VideoCard } from './components/video-card/VideoCard'
