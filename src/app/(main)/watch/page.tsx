@@ -1,16 +1,22 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { HiOutlineHeart } from 'react-icons/hi'
 import Avatar from '@/common/components/ui/avatar/Avatar'
 import Button from '@/common/components/ui/button/Button'
 
 export default function WatchPage() {
+  const searchParams = useSearchParams()
+  const videoId = searchParams.get('v')
+
   return (
     <div className="watch-page">
       <div className="watch-page__main">
         {/* Video Player Placeholder */}
         <div className="video-player">
-          <div className="video-player__placeholder">Video Player (Coming Soon)</div>
+          <div className="video-player__placeholder">
+            Video ID: {videoId || 'No video selected'}
+          </div>
         </div>
 
         {/* Video Info */}
