@@ -1,6 +1,7 @@
 'use client'
 
 import { AuthProvider } from '@/modules/auth/context/context'
+import { QueryProvider } from './query-provider'
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
 
@@ -10,9 +11,10 @@ interface AppProvidersProps {
 
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <AuthProvider>
-      {children}
-      <Toaster
+    <QueryProvider>
+      <AuthProvider>
+        {children}
+        <Toaster
         position="top-right"
         toastOptions={{
           duration: 4000,
@@ -34,6 +36,7 @@ export function AppProviders({ children }: AppProvidersProps) {
           },
         }}
       />
-    </AuthProvider>
+      </AuthProvider>
+    </QueryProvider>
   )
 }
