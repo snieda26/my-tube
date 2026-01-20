@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export default function HomePage() {
   const [videos, setVideos] = useState([])
@@ -11,8 +12,6 @@ export default function HomePage() {
       .then((data) => setVideos(data.videos))
   }, [])
 
-  console.log(videos)
-
   return (
     <div>
       <div className="page-header">
@@ -22,7 +21,7 @@ export default function HomePage() {
       <div className="video-grid">
         {videos && videos.length > 0 ? (
           videos.map((video: any) => (
-            <div className="video-card" key={video.id}>
+            <Link href={`/watch?v=${video.publicId}`} key={video.id} className="video-card">
               <div className="video-card__thumbnail">
                 <img
                   src={`${process.env.NEXT_PUBLIC_API_URL}${video.thumbnailPath}`}
@@ -33,7 +32,6 @@ export default function HomePage() {
                     objectFit: 'cover',
                   }}
                 />
-                {/* <span className="video-card__duration">{video.maxQuality}</span> */}
               </div>
               <div className="video-card__content">
                 <img
@@ -57,7 +55,7 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>No videos found</div>
