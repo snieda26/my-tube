@@ -7,6 +7,13 @@
   background: #000;
   border-radius: $radius-lg;
   overflow: hidden;
+
+  &__placeholder {
+    @include flex-center;
+    @include aspect-video;
+    color: $text-muted;
+    font-size: $text-lg;
+  }
   
   &--theater {
     border-radius: 0;

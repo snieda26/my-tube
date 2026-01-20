@@ -241,6 +241,11 @@
     @include flex-column;
     gap: $spacing-3;
   }
+
+  &__placeholder {
+    color: $text-muted;
+    font-size: $text-sm;
+  }
 }
 
 .video-item {
