@@ -63,7 +63,6 @@ export default function WatchPage() {
   return (
     <div className="watch-page">
       <div className="watch-page__main">
-        {/* Video Player */}
         <div className="video-player">
           <div className="video-player__video-wrapper">
             <video
@@ -75,7 +74,6 @@ export default function WatchPage() {
           </div>
         </div>
 
-        {/* Video Info */}
         <div className="video-info">
           <h1 className="video-info__title">{video.title}</h1>
 
@@ -99,7 +97,6 @@ export default function WatchPage() {
           </div>
         </div>
 
-        {/* Channel Info */}
         <div className="channel-info">
           <div className="channel-info__left">
             <Avatar
@@ -122,14 +119,12 @@ export default function WatchPage() {
           </Button>
         </div>
 
-        {/* Description */}
         <div className="video-description">
           <div className="video-description__content">
             {video.description || 'No description'}
           </div>
         </div>
 
-        {/* Comments */}
         <div className="comments-section">
           <div className="comments-section__header">
             <h3>Comments</h3>
@@ -148,7 +143,6 @@ export default function WatchPage() {
           </form>
 
           <div className="comments-section__list">
-            {/* Comments will be loaded here */}
           </div>
         </div>
       </div>
@@ -157,7 +151,6 @@ export default function WatchPage() {
         <div className="similar-videos">
           <h3 className="similar-videos__header">Similar Videos</h3>
           <div className="similar-videos__list">
-            {/* Videos will be loaded here */}
           </div>
         </div>
       </div>
