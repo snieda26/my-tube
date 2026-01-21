@@ -1,18 +1,43 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
 export default function HomePage() {
-  const [videos, setVideos] = useState([])
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['videos'],
+    queryFn: async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/videos`)
+      return response.json()
+    },
+    staleTime: 30 * 1000,
+  })
 
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/videos`)
-      .then((res) => res.json())
-      .then((data) => setVideos(data.videos))
-  }, [])
+  const videos = data?.videos || []
 
-  console.log(videos)
+  if (isLoading) {
+    return (
+      <div>
+        <div className="page-header">
+          <h1 className="page-header__title">Welcome to MyTube!</h1>
+        </div>
+        <div className="message message--loading">Loading videos...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>
+        <div className="page-header">
+          <h1 className="page-header__title">Welcome to MyTube!</h1>
+        </div>
+        <div className="message message--error">
+          ❌ Error: {error instanceof Error ? error.message : 'Something went wrong'}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -30,11 +55,6 @@ export default function HomePage() {
                   <img
                     src={`${process.env.NEXT_PUBLIC_API_URL}${video.thumbnailPath}`}
                     alt={video.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
                   />
                   {/* <span className="video-card__duration">{video.maxQuality}</span> */}
                 </div>
@@ -47,7 +67,6 @@ export default function HomePage() {
                     }
                     alt={video.channel.handle}
                     className="video-card__avatar"
-                    style={{ width: 36, height: 36, borderRadius: '50%' }}
                   />
                   <div className="video-card__info">
                     <h3 className="video-card__title">{video.title}</h3>
@@ -64,7 +83,7 @@ export default function HomePage() {
             )
           })
         ) : (
-          <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>No videos found</div>
+          <div className="message message--empty">No videos found</div>
         )}
       </div>
     </div>

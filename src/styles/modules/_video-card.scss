@@ -42,9 +42,13 @@
     padding-top: $spacing-3;
   }
 
-  &__avatar {
-    flex-shrink: 0;
-  }
+	&__avatar {
+		flex-shrink: 0;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
 
   &__info {
     flex: 1;
@@ -163,6 +167,6 @@
     border-radius: $radius-sm;
     background: linear-gradient(90deg, $bg-tertiary 0%, $bg-hover 50%, $bg-tertiary 100%);
     background-size: 200% 100%;
-    animation: skeleton-loading 1.5s ease-in-out infinite;
-  }
+		animation: skeleton-loading 1.5s ease-in-out infinite;
+	}
 }

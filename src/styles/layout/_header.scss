@@ -104,6 +104,16 @@
 		border-radius: $radius-full;
 		font-size: $text-sm;
 	}
+
+	&__auth {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+
+		.button svg {
+			margin-right: 8px;
+		}
+	}
 }
 
 // Search Field

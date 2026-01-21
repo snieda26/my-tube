@@ -141,9 +141,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                   </div>
                 </>
               ) : (
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <div className="header__auth">
                   <Button variant="ghost" onClick={() => router.push('/auth/login')}>
-                    <HiUser style={{ marginRight: '8px' }} />
+                    <HiUser />
                     Sign In
                   </Button>
                 </div>

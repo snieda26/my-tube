@@ -81,3 +81,20 @@
   }
 }
 
+.message {
+  padding: 2rem;
+  text-align: center;
+  
+  &--loading {
+    color: $text-muted;
+  }
+  
+  &--error {
+    color: #f44336;
+  }
+  
+  &--empty {
+    color: $text-muted;
+  }
+}
+
