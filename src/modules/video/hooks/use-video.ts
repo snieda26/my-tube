@@ -1,10 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { videoService } from '../services/video.service'
+import { VideoWithDetails } from '../types/video.types'
 import toast from 'react-hot-toast'
+
+const VIDEO_QUERY_KEY = 'video' as const
 
 export function useVideo(publicId: string) {
   return useQuery({
-    queryKey: ['video', publicId],
+    queryKey: [VIDEO_QUERY_KEY, publicId],
     queryFn: () => videoService.getVideo(publicId),
     enabled: !!publicId,
     retry: 1,
@@ -12,38 +15,42 @@ export function useVideo(publicId: string) {
   })
 }
 
-export function useToggleLike() {
+export function useToggleLike(publicId: string) {
   const queryClient = useQueryClient()
+  const queryKey = [VIDEO_QUERY_KEY, publicId]
 
   return useMutation({
     mutationFn: (videoId: string) => videoService.toggleLike(videoId),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['video'] })
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey })
 
-      const previousData = queryClient.getQueryData(['video'])
+      // Snapshot the previous value
+      const previousData = queryClient.getQueryData<VideoWithDetails>(queryKey)
 
-      queryClient.setQueriesData({ queryKey: ['video'] }, (old: unknown) => {
-        if (old && typeof old === 'object' && 'isLiked' in old) {
-          const video = old as { isLiked: boolean; likesCount: number }
-          return {
-            ...video,
-            isLiked: !video.isLiked,
-            likesCount: video.isLiked ? video.likesCount - 1 : video.likesCount + 1,
-          }
-        }
-        return old
-      })
+      // Optimistically update
+      if (previousData) {
+        queryClient.setQueryData<VideoWithDetails>(queryKey, {
+          ...previousData,
+          isLiked: !previousData.isLiked,
+          likesCount: previousData.isLiked
+            ? previousData.likesCount - 1
+            : previousData.likesCount + 1,
+        })
+      }
 
       return { previousData }
     },
     onError: (_err, _videoId, context) => {
+      // Rollback on error
       if (context?.previousData) {
-        queryClient.setQueryData(['video'], context.previousData)
+        queryClient.setQueryData(queryKey, context.previousData)
       }
       toast.error('Failed to update like')
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['video'] })
+      // Refetch to ensure consistency
+      queryClient.invalidateQueries({ queryKey })
     },
   })
 }

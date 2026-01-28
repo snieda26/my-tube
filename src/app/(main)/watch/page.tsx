@@ -1,53 +1,40 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Avatar from '@/common/components/ui/avatar/Avatar'
 import Button from '@/common/components/ui/button/Button'
 import { VideoPlayer, useVideo, useToggleLike, useRecordView } from '@/modules/video'
 import { getVideoUrl, getThumbnailUrl, getAvatarUrl } from '@/common/utils/storage'
+import { formatCompactNumber, formatTimeAgo } from '@/common/utils/format'
+import { VIEW_RECORDING } from '@/modules/video/constants/video.constants'
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi'
-
-function formatViews(views: number): string {
-  if (views >= 1_000_000) {
-    return `${(views / 1_000_000).toFixed(1)}M`
-  }
-  if (views >= 1_000) {
-    return `${(views / 1_000).toFixed(1)}K`
-  }
-  return views.toString()
-}
-
-function formatTimeAgo(dateString: string): string {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-
-  if (diffInSeconds < 60) return 'just now'
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`
-  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`
-  if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`
-  return `${Math.floor(diffInSeconds / 31536000)} years ago`
-}
 
 export default function WatchPage() {
   const searchParams = useSearchParams()
   const publicId = searchParams.get('v') || ''
+  const viewRecordedRef = useRef(false)
 
   const { data: video, isLoading, error } = useVideo(publicId)
-  const toggleLike = useToggleLike()
+  const toggleLike = useToggleLike(publicId)
   const recordView = useRecordView()
 
+  // Record view after delay - use ref to prevent multiple recordings
   useEffect(() => {
-    if (video?.id) {
-      const timer = setTimeout(() => {
-        recordView.mutate(video.id)
-      }, 5000)
+    if (!video?.id || viewRecordedRef.current) return
 
-      return () => clearTimeout(timer)
-    }
-  }, [video?.id, recordView])
+    const timer = setTimeout(() => {
+      viewRecordedRef.current = true
+      recordView.mutate(video.id)
+    }, VIEW_RECORDING.DELAY_MS)
+
+    return () => clearTimeout(timer)
+  }, [video?.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reset view recording flag when video changes
+  useEffect(() => {
+    viewRecordedRef.current = false
+  }, [publicId])
 
   const handleLike = () => {
     if (video) {
@@ -76,11 +63,11 @@ export default function WatchPage() {
   }
 
   if (error || !video) {
-    const errorMessage = error 
-      ? 'Failed to load video. Make sure the backend server is running at ' + 
+    const errorMessage = error
+      ? 'Failed to load video. Make sure the backend server is running at ' +
         (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4200')
       : 'Video not found'
-    
+
     return (
       <div className="watch-page">
         <div className="watch-page__main">
@@ -117,7 +104,7 @@ export default function WatchPage() {
 
           <div className="video-info__meta">
             <div className="video-info__stats">
-              <span>{formatViews(video.views)} views</span>
+              <span>{formatCompactNumber(video.views)} views</span>
               <span>{formatTimeAgo(video.createdAt)}</span>
             </div>
 
@@ -146,7 +133,7 @@ export default function WatchPage() {
                 {video.channel.owner.name || video.channel.handle}
               </a>
               <span className="channel-info__subscribers">
-                {formatViews(video.subscribersCount)} subscribers
+                {formatCompactNumber(video.subscribersCount)} subscribers
               </span>
             </div>
           </div>
