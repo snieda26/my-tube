@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4200',
   timeout: 30000,
   withCredentials: true,
 }
